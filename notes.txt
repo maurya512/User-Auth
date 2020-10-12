@@ -1,0 +1,31 @@
+Initialize the backend using npm and install necessary packages.
+
+Set up a MongoDB database using Mongo Atlas
+
+Set up a server with Node.JS and 
+Express
+
+Create a database schema to define a user for registration and login purposes. 
+
+Set up two API routes, register and login, using passport + jsonwebtokens for authentication and validator for input validation
+
+Test the routes using Postman
+
+bcryptjs - hash passwords
+body-parser - used to parse incoming request bodies in a middleware 
+concurrently - allows us to run our backend and frontend concurrently and on different ports
+express - sits on top of Node to make the routing, request handling, and responding easier to write
+is-empty - global function that will come in handy we use validator
+jsonwebtokens - used for authorization
+mongoose - used to interact with MongoDB
+passport - used to authenticate requests, which it does through an extensible set of plugins known as strategies
+passport-jwt - passport strategy for authenticating with a JSON web token
+validator - to validate the user inputs 
+nodemon - a utility that will monitor for any changes in your code and automatically restart your server. 
+
+create the register endpoint
+
+pull the errors and isValid variables from our "validateRegisterInput(req.body)" function and check input validation.
+If valid input, use MongoDB's "User.findOne()" to see if the user already exists
+If user is a new user, fill in the fields (name, email, password) with data sent in the body of the parser
+Use "bcryptjs" to hash the password before storing it in your database
