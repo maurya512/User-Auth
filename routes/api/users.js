@@ -47,3 +47,59 @@ router.post('/register', (req,res) => {
         }
     });
 });
+
+// login route for the user 
+router.post('/login', (req,res) => {
+    // form validation
+    const {errors, isValid} = validateLoginInput(req.body);
+
+    // check validation
+    if(!isValid) {
+        return res.status(400).json(errors);
+    }
+
+    const email = req.body.email;
+    const password = req.body.password;
+
+    // find user by email
+    User.findOne({email}).then(user => {
+        // check if user exists
+        if (!user) {
+            return res.status(404).json({emailnotfound: 'Email not found'});
+        }
+
+        // check password
+        bcrypt.compare(password, user.password).then(isMatch => {
+            if (!isMatch) {
+                // user matched
+                // create jwt payload
+                const payload = {
+                    id: user.id,
+                    name: user.name
+                };
+
+                // sign token
+                jwt.sign(
+                    payload,
+                    keys.secretorKey,
+                    {
+                        expiresIn: 31556926 
+                    },
+                    (err,token) => {
+                        res.json({
+                            success: true,
+                            token: "Bearer" + token
+                        });
+                    }
+                );
+            } else {
+                return res
+                .status(400)
+                .json({ passwordincorrect: "Password incorrect"});
+            }
+        });
+    });
+});
+
+// export our router
+module.exports = router;
